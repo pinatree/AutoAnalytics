@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AutoAnalyticsServer</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <input type="text" />
+    <a class="myclassx" id="kek_element" />
+
+
+    <div>
+        <a>Группа деталей</a>
+        <br />
+        <select id="group_lb">
+            <option></option>
+        </select>
+    </div>
+    <div>
+        <a>Подгруппа деталей</a>
+        <br />
+        <select disabled id="subgroup_lb">
+        </select>
+    </div>
+    <div>
+        <a>Деталь</a>
+        <br />
+        <select disabled id="detail_lb">
+        </select>
+    </div>
+
+    <br />
+    <button id="select_detail_btn" type="button" class="btn btn-success">Выбрать</button>
+    <br />
+
+    <table id="selected_details_table" class="table table-bordered table-striped mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Группа</th>
+                <th scope="col">Подгруппа</th>
+                <th scope="col">Деталь</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - AutoAnalyticsServer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+
+
+    <script src="~/js/detail_api_scripts.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            //set event: select detail click
+            $(select_detail_btn).on('click', function (e) {
+                let selectedGroup = $(group_lb).val();
+                let selectedSubgroup = $(subgroup_lb).val();
+                let selectedDetail = $(detail_lb).val();
+                addSelectedDetail(selectedGroup, selectedSubgroup, selectedDetail);
+            });
+
+            //set event: if we chose another group
+            $(group_lb).on('change', function (e) {
+
+                let selectedGroup = $(group_lb).val();
+
+                reloadSubgroups(selectedGroup);
+
+                //set subgroup selection enabled
+                $(subgroup_lb).prop("disabled", false);
+
+                //disable detail selection and remove text
+                $(detail_lb).prop("disabled", true);
+                $(detail_lb).text("");
+            });
+
+            //set event: if we chose another subgroup
+            $(subgroup_lb).on('change', function (e) {
+
+                //set subgroup selection enabled
+                $(detail_lb).prop("disabled", false);
+
+                let selectedGroup = $(group_lb).val();
+
+                let selectedSubgroup = $(subgroup_lb).val();
+
+                reloadDetails(selectedGroup, selectedSubgroup);
+            });
+
+            reloadGroups();
+        })
+
+        function addSelectedDetail(group, subgroup, detail) {
+            var recommendations = getRecommendDetails(group, subgroup, detail);
+            recommendations.each(function () {
+                alert($(this).group);
+            });
+
+            //$('#selected_details_table > tbody:last-child').append('<tr><th>'
+            //    + group
+            //    + '</th><td>'
+            //    + subgroup
+            //    + '</td><td>'
+            //    + detail
+            //    + '</td></tr>');
+        }
+
+        function checkContainsInSelectedtable(group, subgroup, detail) {
+
+        }
+
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
