@@ -15,8 +15,8 @@
         </main>
     </div>
 
-    <input type="text" />
-    <a class="myclassx" id="kek_element" />
+    @*<input type="text" />
+        <a class="myclassx" id="kek_element" />*@
 
 
     <div>
@@ -43,6 +43,10 @@
     <button id="select_detail_btn" type="button" class="btn btn-success">Выбрать</button>
     <br />
 
+    <br />
+    <h3>Выбранные детали:</h3>
+    <br />
+
     <table id="selected_details_table" class="table table-bordered table-striped mb-0">
         <thead>
             <tr>
@@ -52,7 +56,23 @@
             </tr>
         </thead>
         <tbody>
-            
+        </tbody>
+    </table>
+
+    <br />
+    <h3>Рекомендуемые к проверке детали:</h3>
+    <br />
+
+    <table id="recommendations_table" class="table table-bordered table-striped mb-0">
+        <thead>
+            <tr>
+                <th scope="col">Группа</th>
+                <th scope="col">Подгруппа</th>
+                <th scope="col">Деталь</th>
+                <th scope="col">Достоверность</th>
+            </tr>
+        </thead>
+        <tbody>
         </tbody>
     </table>
 
@@ -72,6 +92,9 @@
 
     <script>
         $(document).ready(function () {
+
+            //load details
+            reloadGroups();
 
             //set event: select detail click
             $(select_detail_btn).on('click', function (e) {
@@ -108,27 +131,26 @@
 
                 reloadDetails(selectedGroup, selectedSubgroup);
             });
-
-            reloadGroups();
         })
 
         function addSelectedDetail(group, subgroup, detail) {
-            var recommendations = getRecommendDetails(group, subgroup, detail);
-            recommendations.each(function () {
-                alert($(this).group);
-            });
 
-            //$('#selected_details_table > tbody:last-child').append('<tr><th>'
-            //    + group
-            //    + '</th><td>'
-            //    + subgroup
-            //    + '</td><td>'
-            //    + detail
-            //    + '</td></tr>');
+            //check we are selected all items
+            if (group != null && subgroup != null && detail != null) {
+                $('#selected_details_table > tbody:last-child').append('<tr><th>'
+                    + group
+                    + '</th><td>'
+                    + subgroup
+                    + '</td><td>'
+                    + detail
+                    + '</td></tr>');
+
+                addRecommendDetails(group, subgroup, detail);
+            }
         }
 
         function checkContainsInSelectedtable(group, subgroup, detail) {
-
+            //Проверяем, была ли данная деталь уже была выбрана ранее (содержится ли в таблице)
         }
 
     </script>

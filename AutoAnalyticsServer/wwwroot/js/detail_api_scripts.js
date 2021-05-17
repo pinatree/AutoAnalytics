@@ -11,6 +11,9 @@ function reloadGroups() {
         $.each(json, function (index, value) {
             $(group_lb).append('<option>' + value + '</option>');
         });
+
+        $(subgroup_lb).prop("disabled", false);
+        reloadSubgroups($(group_lb).val());
     });
 }
 
@@ -31,6 +34,9 @@ function reloadSubgroups(search_group) {
             $.each(json, function (index, value) {
                 $(subgroup_lb).append('<option>' + value + '</option>');
             });
+
+            $(detail_lb).prop("disabled", false);
+            reloadDetails($(group_lb).val(), $(subgroup_lb).val());
         });
 }
 
@@ -54,7 +60,7 @@ function reloadDetails(search_group, search_subgroup) {
         });
 }
 
-function getRecommendDetails(search_group, search_subgroup, search_detail) {
+function addRecommendDetails(search_group, search_subgroup, search_detail) {
     //get json data from api
     $.getJSON("/api/recommendations",
         {
@@ -63,6 +69,17 @@ function getRecommendDetails(search_group, search_subgroup, search_detail) {
             detail: search_detail
         },
         function (json) {
-            return json;
+
+            $.each(json, function (index, value) {
+                $('#recommendations_table > tbody:last-child').append('<tr><th>'
+                    + value.group   
+                    + '</th><td>'
+                    + value.subgroup
+                    + '</td><td>'
+                    + value.detail
+                    + '</td><td>'
+                    + value.confidence
+                    + '</td></tr>');
+            });            
         });
 }

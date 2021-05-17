@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoAnalyticsServer.EFModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+//using AutoAnalyticsServer.EF;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -11,16 +14,17 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class GroupController : ControllerBase
     {
+        private AutoAnalyticsContext _dbContext;
+
+        public GroupController(AutoAnalyticsContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         [HttpGet]
         public string[] GetGroups()
         {
-            return new string[]
-            {
-                "Шасси",
-                "Колеса",
-                "Стекла",
-                "Двигатель"
-            };
+            return _dbContext.DetailInfos.Select(x => x.DetGroup).Distinct().ToArray();
         }
     }
 
@@ -28,16 +32,17 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class SubGroupController : ControllerBase
     {
+        private AutoAnalyticsContext _dbContext;
+
+        public SubGroupController(AutoAnalyticsContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         [HttpGet]
         public string[] GetSubGroups(string group)
         {
-            return new string[]
-            {
-                "11-" + group,
-                "22-" + group,
-                "33-" + group,
-                "44-" + group,
-            };
+            return _dbContext.DetailInfos.Where(x => x.DetGroup == group).Select(x => x.DetSubgroup).Distinct().ToArray();
         }
     }
 
@@ -45,16 +50,17 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class DetailController : ControllerBase
     {
+        private AutoAnalyticsContext _dbContext;
+
+        public DetailController(AutoAnalyticsContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         [HttpGet]
         public string[] GetDetails(string group, string subgroup)
         {
-            return new string[]
-            {
-                "1" + "-" + group + "-" + subgroup,
-                "2" + "-" + group + "-" + subgroup,
-                "3" + "-" + group + "-" + subgroup,
-                "4" + "-" + group + "-" + subgroup
-            };
+            return _dbContext.DetailInfos.Where(x => x.DetGroup == group && x.DetSubgroup == subgroup).Select(x => x.Detail).Distinct().ToArray();
         }
     }
 
@@ -62,30 +68,29 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class RecommendationsController : ControllerBase
     {
+        private AutoAnalyticsContext _dbContext;
+
+        public RecommendationsController(AutoAnalyticsContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         [HttpGet]
         public IEnumerable<Recommendation> GetRecommendations(string group, string subgroup, string detail)
         {
-            return new List<Recommendation>()
-            {
-                new Recommendation()
-                {
-                    Group = "A",
-                    Subgroup = "B",
-                    Detail = "C"
-                },
-                new Recommendation()
-                {
-                    Group = "A1",
-                    Subgroup = "B1",
-                    Detail = "C1"
-                },
-                new Recommendation()
-                {
-                    Group = "A2",
-                    Subgroup = "B2",
-                    Detail = "C2"
-                },
-            };
+            var recommendations = _dbContext.AssociationRules.Where(x =>
+                x.CauseNavigation.Detail.Trim() == detail.Trim() &&
+                x.CauseNavigation.DetSubgroup.Trim() == subgroup.Trim() &&
+                x.CauseNavigation.DetGroup.Trim() == group.Trim()).Select(x =>
+                    new Recommendation()
+                    {
+                        Detail = x.СonsequenceNavigation.Detail,
+                        Subgroup = x.СonsequenceNavigation.DetSubgroup,
+                        Group = x.СonsequenceNavigation.DetGroup,
+                        Confidence = x.Confidence
+                    });
+
+            return recommendations;
         }
 
         public class Recommendation
@@ -93,6 +98,7 @@ namespace AutoAnalyticsServer.Controllers
             public string Group { get; set; }
             public string Subgroup { get; set; }
             public string Detail { get; set; }
+            public double Confidence { get; set; }
         }
     }
 }
