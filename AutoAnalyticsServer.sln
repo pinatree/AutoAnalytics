@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoAnalyticsServer", "AutoAnalyticsServer\AutoAnalyticsServer.csproj", "{DFE1D025-0D0C-4703-B059-8570FD0E526E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoAnalyticsServer.EFModel", "AutoAnalyticsServer.EFModel\AutoAnalyticsServer.EFModel.csproj", "{603092AD-5EAD-4FC5-86BA-2EBCFAF8AB2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoAnalyticsServer.SqlServerEFModel", "AutoAnalyticsServer.EFModel\AutoAnalyticsServer.SqlServerEFModel.csproj", "{603092AD-5EAD-4FC5-86BA-2EBCFAF8AB2F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{AC239D96-DF8A-40E1-A7DE-8DF1DCC29484}"
 EndProject
@@ -13,7 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoAnalyticsServer.InMemor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoAnalyticsServer.DbModel", "AutoAnalyticsServer.DbModel\AutoAnalyticsServer.DbModel.csproj", "{A97EC215-DC2E-414B-822B-ED51662DD287}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EFModel", "EFModel", "{42EEF6EE-E9BE-4F90-810A-1B242CF5DCA3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlServerEFModel", "SqlServerEFModel", "{42EEF6EE-E9BE-4F90-810A-1B242CF5DCA3}"
+	ProjectSection(SolutionItems) = preProject
+		SqlServerEFModel about.txt = SqlServerEFModel about.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InMemoryModel", "InMemoryModel", "{905AF6C2-9CBD-4F07-9E66-8A7F0345E8EF}"
 EndProject

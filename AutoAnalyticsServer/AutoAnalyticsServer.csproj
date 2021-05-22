@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AutoAnalyticsServer.EFModel\AutoAnalyticsServer.EFModel.csproj" />
+    <ProjectReference Include="..\AutoAnalyticsServer.EFModel\AutoAnalyticsServer.SqlServerEFModel.csproj" />
   </ItemGroup>
 
 </Project>

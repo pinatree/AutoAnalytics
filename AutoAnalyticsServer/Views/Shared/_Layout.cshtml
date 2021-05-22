@@ -8,12 +8,30 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    @* header *@
 
-    @*<div class="container">*@
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    @*</div>*@
+    <nav class="navbar navbar-expand-sm">
+        <a class="navbar-brand" href="/">Авто аналитика</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample03"
+                aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample03">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/home/instruction">Инструкция</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/home/privacy">Конфиденциальность</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
 
 
     @RenderSection("Scripts", required: false)

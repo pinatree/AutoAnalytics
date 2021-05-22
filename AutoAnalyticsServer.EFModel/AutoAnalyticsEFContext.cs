@@ -1,19 +1,20 @@
-﻿using AutoAnalyticsServer.DbModel;
+﻿/*
+ * Контекст Entity framework для связи с SQL Server
+ */
+
+using AutoAnalyticsServer.DbModel;
 using AutoAnalyticsServer.DbModel.DataTypes;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace AutoAnalyticsServer.EFModel
+namespace AutoAnalyticsServer.SqlServerEFModel
 {
-    public partial class AutoAnalyticsEFContext : DbContext, IAutoAnalyticsContext
+    public partial class AutoAnalyticsSqlServerEFContext : DbContext, IAutoAnalyticsContext
     {
-        public AutoAnalyticsEFContext()
+        public AutoAnalyticsSqlServerEFContext()
         {
         }
 
-        public AutoAnalyticsEFContext(DbContextOptions<AutoAnalyticsEFContext> options)
+        public AutoAnalyticsSqlServerEFContext(DbContextOptions<AutoAnalyticsSqlServerEFContext> options)
             : base(options)
         {
         }
