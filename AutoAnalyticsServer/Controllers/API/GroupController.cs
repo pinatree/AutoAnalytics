@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using AutoAnalyticsServer.DbModel;
 using AutoAnalyticsServer.SqlServerEFModel;
+using AutoAnalyticsServer.DbModel.DataTypes;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -26,6 +27,7 @@ namespace AutoAnalyticsServer.Controllers
         public GroupController(AutoAnalyticsSqlServerEFContext dbContext)
         {
             _dbContext = dbContext;
+            dbContext.FillByValues();
         }
 
         [HttpGet]

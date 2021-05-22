@@ -26,6 +26,7 @@ namespace AutoAnalyticsServer.Controllers
         public RecommendationController(AutoAnalyticsSqlServerEFContext dbContext)
         {
             _dbContext = dbContext;
+            dbContext.FillByValues();
         }
 
         [HttpGet]

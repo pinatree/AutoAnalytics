@@ -26,6 +26,7 @@ namespace AutoAnalyticsServer.Controllers
         public DetailController(AutoAnalyticsSqlServerEFContext dbContext)
         {
             _dbContext = dbContext;
+            dbContext.FillByValues();
         }
 
         [HttpGet]

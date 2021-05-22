@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using Microsoft.EntityFrameworkCore;
+using AutoAnalyticsServer.SqlServerEFModel;
+
 namespace AutoAnalyticsServer
 {
     public class Startup
@@ -19,7 +22,27 @@ namespace AutoAnalyticsServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(ServiceLifetime.Singleton);
+            //var x = new AutoAnalyticsSqlServerEFContext();
+            //x.InitInMemoryValues();
+
+#if DEBUG
+            var serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
+            //services.AddDbContext<AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(ServiceLifetime.Singleton);
+            services.AddDbContext<AutoAnalyticsSqlServerEFContext>(opt =>
+            {
+                opt.UseInMemoryDatabase("TestMemoryDb");
+                //opt.UseInternalServiceProvider(serviceProvider);
+            });
+
+#else
+            services.AddDbContext<AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("AutoAnalyticsDB"));
+            }, ServiceLifetime.Singleton);
+#endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,7 +58,9 @@ namespace AutoAnalyticsServer
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
