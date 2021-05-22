@@ -13,7 +13,6 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using AutoAnalyticsServer.EFModel;
 using AutoAnalyticsServer.Models;
 
 namespace AutoAnalyticsServer.Controllers
