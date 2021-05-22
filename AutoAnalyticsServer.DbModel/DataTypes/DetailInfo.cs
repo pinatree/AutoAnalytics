@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace AutoAnalyticsServer.EFModel
+namespace AutoAnalyticsServer.DbModel.DataTypes
 {
     public partial class DetailInfo
     {

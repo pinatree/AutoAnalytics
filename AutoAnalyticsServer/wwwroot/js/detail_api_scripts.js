@@ -62,7 +62,7 @@ function reloadDetails(search_group, search_subgroup) {
 
 function addRecommendDetails(search_group, search_subgroup, search_detail) {
     //get json data from api
-    $.getJSON("/api/recommendations",
+    $.getJSON("/api/recommendation",
         {
             group: search_group,
             subgroup: search_subgroup,

@@ -1,18 +1,19 @@
-﻿using System;
+﻿using AutoAnalyticsServer.DbModel;
+using AutoAnalyticsServer.DbModel.DataTypes;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-
-#nullable disable
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace AutoAnalyticsServer.EFModel
 {
-    public partial class AutoAnalyticsContext : DbContext
+    public partial class AutoAnalyticsEFContext : DbContext, IAutoAnalyticsContext
     {
-        public AutoAnalyticsContext()
+        public AutoAnalyticsEFContext()
         {
         }
 
-        public AutoAnalyticsContext(DbContextOptions<AutoAnalyticsContext> options)
+        public AutoAnalyticsEFContext(DbContextOptions<AutoAnalyticsEFContext> options)
             : base(options)
         {
         }

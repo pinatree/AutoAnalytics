@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AutoAnalyticsServer.DbModel\AutoAnalyticsServer.DbModel.csproj" />
+  </ItemGroup>
+
 </Project>
