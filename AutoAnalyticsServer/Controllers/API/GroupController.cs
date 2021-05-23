@@ -13,8 +13,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 using AutoAnalyticsServer.DbModel;
-using AutoAnalyticsServer.SqlServerEFModel;
-using AutoAnalyticsServer.DbModel.DataTypes;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -24,7 +22,7 @@ namespace AutoAnalyticsServer.Controllers
     {
         private IAutoAnalyticsContext _dbContext;
 
-        public GroupController(AutoAnalyticsSqlServerEFContext dbContext)
+        public GroupController(IAutoAnalyticsContext dbContext)
         {
             _dbContext = dbContext;
             dbContext.FillByValues();

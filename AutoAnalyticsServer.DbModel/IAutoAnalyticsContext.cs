@@ -7,5 +7,7 @@ namespace AutoAnalyticsServer.DbModel
     {
         DbSet<AssociationRule> AssociationRules { get; set; }
         DbSet<DetailInfo> DetailInfos { get; set; }
+
+        void FillByValues();
     }
 }

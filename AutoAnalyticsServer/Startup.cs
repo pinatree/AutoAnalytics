@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Microsoft.EntityFrameworkCore;
-using AutoAnalyticsServer.SqlServerEFModel;
+using AutoAnalyticsServer.DbModel;
 
 namespace AutoAnalyticsServer
 {
@@ -22,23 +22,14 @@ namespace AutoAnalyticsServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            //var x = new AutoAnalyticsSqlServerEFContext();
-            //x.InitInMemoryValues();
 
 #if DEBUG
-            var serviceProvider = new ServiceCollection()
-                .AddEntityFrameworkInMemoryDatabase()
-                .BuildServiceProvider();
-
-            //services.AddDbContext<AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(ServiceLifetime.Singleton);
-            services.AddDbContext<AutoAnalyticsSqlServerEFContext>(opt =>
+            services.AddDbContext<IAutoAnalyticsContext, AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(opt =>
             {
                 opt.UseInMemoryDatabase("TestMemoryDb");
-                //opt.UseInternalServiceProvider(serviceProvider);
             });
-
 #else
-            services.AddDbContext<AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(opt =>
+            services.AddDbContext<IAutoAnalyticsContext, AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(opt =>
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("AutoAnalyticsDB"));
             }, ServiceLifetime.Singleton);
