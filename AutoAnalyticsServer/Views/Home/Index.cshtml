@@ -84,23 +84,11 @@
                 let selectedGroup = $(group_lb).val();
                 let selectedSubgroup = $(subgroup_lb).val();
                 let selectedDetail = $(detail_lb).val();
-                //let hbody = table.getElementsByTagName('tbody')[0];
-                //let trr = hbody.getElementsByTagName('tr')[0];
-                //let thh = trr.getElementsByTagName('th')[0];
-                //console.log(trr);       
-                if ($('#tb').html() != '') {
-                    console.log("Условие работает");
-                    let table = document.getElementsByTagName("table")[0].rows[1];
-                    console.log(table);
-  
-                    //let thh = trr.getElementsByTagName('th')[0];
-                } else {
-                    console.log("не работает");
-                    addSelectedDetail();
-                }
 
-                //console.log(hbody);
-                addSelectedDetail(selectedGroup, selectedSubgroup, selectedDetail);
+
+                if (checkContainsInSelectedtable(selectedGroup, selectedSubgroup, selectedDetail) == false) {
+                    addSelectedDetail(selectedGroup, selectedSubgroup, selectedDetail);
+                }
             });
 
             //set event: if we chose another group
@@ -147,10 +135,49 @@
 
                 addRecommendDetails(group, subgroup, detail);
             }
-        }
+    }
 
-        function checkContainsInSelectedtable(group, subgroup, detail) {
-            //Проверяем, была ли данная деталь уже была выбрана ранее (содержится ли в таблице)
-        }
+    function selectedDetailEmpty() {
 
+        if ($('#tb').html() != '') {
+            console.log("Условие работает");
+            let table = document.getElementsByTagName("table")[0];
+
+            //Если у нас есть хотя бы 1 строка
+            if (table.rows[1] != undefined) {
+                return true;
+            }
+            return false;
+
+        }
+    }
+
+    function checkContainsInSelectedtable(group, subgroup, detail) {
+        //Проверяем, была ли данная деталь уже была выбрана ранее (содержится ли в таблице)
+        if ($('#tb').html() != '') {
+            let table = document.getElementsByTagName("table")[0];
+
+            //Если у нас есть хотя бы 1 строка
+            if (selectedDetailEmpty()) {
+
+                //Бегаем по строкам от 1 к последней
+                for (var x = 1; x < table.rows.length; x++) {
+
+                    var selectedRow = table.rows[x];
+
+                    //Check group
+                    if (selectedRow.cells[0].innerHTML == group && selectedRow.cells[1].innerHTML == subgroup && selectedRow.cells[2].innerHTML == detail) {
+                        return true;
+                    }
+
+                }
+
+                return false;
+
+            }
+
+            return false;
+        }
+    }
+    
 </script>
