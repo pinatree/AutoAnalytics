@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  autoanalytics.webportal.website:
+    image: ${DOCKER_REGISTRY-}autoanalyticswebportalwebsite
+    build:
+      context: .
+      dockerfile: AutoAnalyticsServer/Dockerfile
