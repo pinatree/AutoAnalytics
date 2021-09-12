@@ -11,8 +11,11 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
-
-using AutoAnalyticsServer.DbModel;
+using AutoAnalytics.WebPortal.Domain;
+using AutoAnalytics.WebPortal.Domain.DetailAnalysis;
+using Microsoft.EntityFrameworkCore;
+using AutoAnalytics.WebPortal.DAL.PostgreSQL;
+using AutoAnalytics.WebPortal.Business;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -20,25 +23,19 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class SubGroupController : ControllerBase
     {
-        private IAutoAnalyticsContext _dbContext;
+        private DetailAnalysisBusiness _detailAnalysisBusiness;
 
-        public SubGroupController(IAutoAnalyticsContext dbContext)
+        public SubGroupController(DetailAnalysisBusiness detailAnalysisBusiness)
         {
-            _dbContext = dbContext;
-            dbContext.FillByValues();
+            _detailAnalysisBusiness = detailAnalysisBusiness;
         }
 
         [HttpGet]
-        public string[] GetSubGroups(string group)
+        public string[] GetSubGroups(string groupName)
         {
-            return _dbContext.DetailInfos.
-                //filter by detail group
-                Where(detailInfo => detailInfo.DetGroup == group)
-                //select subgroup
-                .Select(detailInfo => detailInfo.DetSubgroup).
-                //delete dublicates
-                Distinct().
-                ToArray();
+            TGroup group = _detailAnalysisBusiness.GetGroupByName(groupName);
+
+            return _detailAnalysisBusiness.GetSubgroups(group.Id).Select(x => x.CName).ToArray();
         }
     }
 }

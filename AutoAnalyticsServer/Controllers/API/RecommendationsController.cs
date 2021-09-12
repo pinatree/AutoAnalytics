@@ -7,12 +7,16 @@
  * OUTPUT: array of (recommendation)
  */
 
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
 
-using AutoAnalyticsServer.DbModel;
+using AutoAnalytics.WebPortal.Domain;
+using AutoAnalytics.WebPortal.Domain.DetailAnalysis;
+using AutoAnalytics.WebPortal.DAL.PostgreSQL;
+using AutoAnalytics.WebPortal.IBusiness.Models;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -20,51 +24,49 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class RecommendationController : ControllerBase
     {
-        private IAutoAnalyticsContext _dbContext;
+        private AutoAnalyticsPostgresDBContext _dbContext;
 
-        public RecommendationController(IAutoAnalyticsContext dbContext)
+        public RecommendationController(AutoAnalyticsPostgresDBContext dbContext)
         {
             _dbContext = dbContext;
-            dbContext.FillByValues();
         }
 
         [HttpGet]
-        public IEnumerable<Recommendation> GetRecommendations(string group, string subgroup, string detail)
+        public IEnumerable<Recommendation> GetRecommendations(string groupName, string subgroupName, string detailName)
         {
-            string searchGroup = group.Trim();
-            string searchSubgroup = subgroup.Trim();
-            string searchDetail = detail.Trim();
+            List<Recommendation> result = new List<Recommendation>();
 
-            var recommendations = _dbContext.AssociationRules.Where(x =>
-                //where cause detail is our detail
-                x.CauseNavigation.DetGroup == searchGroup &&
-                //cause subgroup is our subgroup
-                x.CauseNavigation.DetSubgroup == searchSubgroup &&
-                //cause group is our group
-                x.CauseNavigation.Detail == searchDetail).
-                    //formation of a recommendation
-                    Select(rule =>
-                        new Recommendation()
-                        {
-                            //get group from association rule consequence
-                            Group = rule.СonsequenceNavigation.DetGroup,
-                            //get subgroup from association rule consequence
-                            Subgroup = rule.СonsequenceNavigation.DetSubgroup,
-                            //get detail from association rule consequence
-                            Detail = rule.СonsequenceNavigation.Detail,
-                            //get confidence
-                            Confidence = rule.Confidence
-                        });
+            //Получаем id-шник группы
+            TGroup group = _dbContext.TGroups.FirstOrDefault(g => g.CName == groupName);
 
-            return recommendations;
-        }
+            _dbContext.Entry(group).Collection(g => g.TSubgroups).Load();
 
-        public class Recommendation
-        {
-            public string Detail { get; set; }
-            public string Subgroup { get; set; }
-            public string Group { get; set; }
-            public double Confidence { get; set; }
-        }
+            //Получаем id-шник подгруппы
+            TSubgroup subgroup = _dbContext.TSubgroups.FirstOrDefault(sg => sg.CName == subgroupName);
+
+            _dbContext.Entry(subgroup).Collection(s => s.TDetails).Load();
+
+            //Получаем id-шник подгруппы
+            TDetail detail = _dbContext.TDetails.FirstOrDefault(det => det.CName == detailName);
+
+            IQueryable<TAssocRule> detailAssoRules = _dbContext.TAssocRules.Where(ar => ar.ReasonDetailId == detail.Id);
+
+            foreach (var assocRule in detailAssoRules)
+            {
+                TDetail assocDetail = _dbContext.TDetails.First(x => x.Id == assocRule.ConseqDetailId);
+
+                Recommendation recommendation = new Recommendation()
+                {
+                    Detail = assocDetail.CName,
+                    Subgroup = assocDetail.Subgroup.CName,
+                    Group = assocDetail.Subgroup.Group.CName,
+                    Confidence = Convert.ToDouble(assocRule.CReliability)
+                };
+
+                result.Add(recommendation);
+            }
+
+            return result;
+        }        
     }
 }

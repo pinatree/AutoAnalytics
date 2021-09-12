@@ -11,8 +11,9 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
-
-using AutoAnalyticsServer.DbModel;
+using AutoAnalytics.WebPortal.Domain.DetailAnalysis;
+using AutoAnalytics.WebPortal.DAL.PostgreSQL;
+using AutoAnalytics.WebPortal.Business;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -20,27 +21,19 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class DetailController : ControllerBase
     {
-        private IAutoAnalyticsContext _dbContext;
+        private DetailAnalysisBusiness _detailAnalysisBusiness;
 
-        public DetailController(IAutoAnalyticsContext dbContext)
+        public DetailController(DetailAnalysisBusiness detailAnalysisBusiness)
         {
-            _dbContext = dbContext;
-            dbContext.FillByValues();
+            _detailAnalysisBusiness = detailAnalysisBusiness;
         }
 
         [HttpGet]
-        public string[] GetDetails(string group, string subgroup)
+        public string[] GetDetails(string groupName, string subgroupName)
         {
-            //В идеале конечно, тут нужно обращаться к буфферу, надо будет подумать над этим...
+            TSubgroup subgroup = _detailAnalysisBusiness.GetSubgroupByName(subgroupName);
 
-            return _dbContext.DetailInfos.
-                //filter by group and subgroup
-                Where(detailInfo => detailInfo.DetGroup == group && detailInfo.DetSubgroup == subgroup).
-                //select detail
-                Select(detailInfo => detailInfo.Detail).
-                //remove dublicates
-                Distinct().
-                ToArray();
+            return _detailAnalysisBusiness.GetDetails(subgroup.Id).Select(x => x.CName).ToArray();
         }
     }
 }

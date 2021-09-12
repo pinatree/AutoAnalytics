@@ -2,35 +2,40 @@
     ViewData["Title"] = "Аналитика авто";
 }
 
-<div>
-    <a>Группа деталей</a>
-    <br />
-    <select id="group_lb">
-        <option></option>
-    </select>
-</div>
-<div>
-    <a>Подгруппа деталей</a>
-    <br />
-    <select disabled id="subgroup_lb">
-    </select>
-</div>
-<div>
-    <a>Деталь</a>
-    <br />
-    <select disabled id="detail_lb">
-    </select>
-</div>
+<div class='all'>
+    <div class="top-buffer">
+        <a>Группа деталей</a>
+        <br />
+        <select id="group_lb">
 
-<br />
-<button id="select_detail_btn" type="button" class="btn btn-success">Выбрать</button>
-<br />
+        </select>
+    </div>
+    <div class='pd'>
+        <a>Подгруппа деталей</a>
+        <br />
+        <select id="subgroup_lb">
+
+        </select>
+    </div>
+    <div>
+        <a>Деталь</a>
+        <br />
+        <select id="detail_lb">
+
+        </select>
+    </div>
+
+    <br />
+    <button id="select_detail_btn" type="button" class="btn btn-success">Выбрать</button>
+    <br />
+
+</div>
 
 <br />
 <h3>Выбранные детали:</h3>
 <br />
 
-<table id="selected_details_table" class="table table-bordered table-striped mb-0">
+<table id="selected_details_table" class="table table-bordered table-striped mb-0 ">
     <thead>
         <tr>
             <th scope="col">Группа</th>
@@ -38,7 +43,7 @@
             <th scope="col">Деталь</th>
         </tr>
     </thead>
-    <tbody id="tb"> 
+    <tbody id="tb">
     </tbody>
 </table>
 
@@ -46,34 +51,29 @@
 <h3>Рекомендуемые к проверке детали:</h3>
 <br />
 
-<table id="recommendations_table" class="table table-bordered table-striped mb-0">
-    <thead>
-        <tr>
-            <th scope="col">Группа</th>
-            <th scope="col">Подгруппа</th>
-            <th scope="col">Деталь</th>
-            <th scope="col">Достоверность</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div class='tbl'>
+    <table id="recommendations_table" class="table table-bordered table-striped mb-0">
+        <thead>
+            <tr>
+                <th scope="col">
+                    Группа
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2021 - AutoAnalyticsServer - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
-</footer>
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-<script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
 
 
-<script src="~/js/detail_api_scripts.js" asp-append-version="true"></script>
+    <script src="~/js/detail_api_scripts.js" asp-append-version="true"></script>
 
-<script>
+    <script>
         $(document).ready(function () {
 
             //load details
@@ -84,7 +84,6 @@
                 let selectedGroup = $(group_lb).val();
                 let selectedSubgroup = $(subgroup_lb).val();
                 let selectedDetail = $(detail_lb).val();
-
 
                 if (checkContainsInSelectedtable(selectedGroup, selectedSubgroup, selectedDetail) == false) {
                     addSelectedDetail(selectedGroup, selectedSubgroup, selectedDetail);
@@ -135,49 +134,49 @@
 
                 addRecommendDetails(group, subgroup, detail);
             }
-    }
-
-    function selectedDetailEmpty() {
-
-        if ($('#tb').html() != '') {
-            console.log("Условие работает");
-            let table = document.getElementsByTagName("table")[0];
-
-            //Если у нас есть хотя бы 1 строка
-            if (table.rows[1] != undefined) {
-                return true;
-            }
-            return false;
-
         }
-    }
 
-    function checkContainsInSelectedtable(group, subgroup, detail) {
-        //Проверяем, была ли данная деталь уже была выбрана ранее (содержится ли в таблице)
-        if ($('#tb').html() != '') {
-            let table = document.getElementsByTagName("table")[0];
+        function checkTableHasRows() {
 
-            //Если у нас есть хотя бы 1 строка
-            if (selectedDetailEmpty()) {
+            if ($('#tb').html() != '') {
+                let table = document.getElementsByTagName("table")[0];
 
-                //Бегаем по строкам от 1 к последней
-                for (var x = 1; x < table.rows.length; x++) {
+                //Если у нас есть хотя бы 1 строка
+                if (table.rows[1] != undefined) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
-                    var selectedRow = table.rows[x];
+        function checkContainsInSelectedtable(group, subgroup, detail) {
+            //Проверяем, была ли данная деталь уже была выбрана ранее (содержится ли в таблице)
+            if ($('#tb').html() != '') {
+                let table = document.getElementsByTagName("table")[0];
 
-                    //Check group
-                    if (selectedRow.cells[0].innerHTML == group && selectedRow.cells[1].innerHTML == subgroup && selectedRow.cells[2].innerHTML == detail) {
-                        return true;
+                //Если у нас есть хотя бы 1 строка
+                if (checkTableHasRows()) {
+
+                    //Бегаем по строкам от 1 к последней
+                    for (var x = 1; x < table.rows.length; x++) {
+
+                        var selectedRow = table.rows[x];
+
+                        //Check group
+                        if ( (selectedRow.cells[0].innerHTML == group) &&
+                            (selectedRow.cells[1].innerHTML == subgroup) &&
+                            (selectedRow.cells[2].innerHTML == detail) ) {
+                            return true;
+                        }
+
                     }
+
+                    return false;
 
                 }
 
                 return false;
-
             }
-
-            return false;
         }
-    }
-    
-</script>
+
+    </script>

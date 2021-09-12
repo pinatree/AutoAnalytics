@@ -82,3 +82,71 @@ body {
 .table-wrapper-scroll-y {
     display: block;
 }
+
+div.background {
+    width: 500px;
+    height: 250px;
+    background: url(klematis.jpg) repeat;
+    border: 2px solid black;
+}
+
+div.transbox {
+    width: 400px;
+    height: 180px;
+    margin: 30px 50px;
+    background-color: #ffffff;
+    border: 1px solid black;
+    opacity: 0.6;
+    filter: alpha(opacity=60); /* For IE8 and earlier */
+}
+
+.top-buffer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+h1 {
+    display: block;
+    text-align: center;
+}
+
+h3, .all {
+    padding: 10px;
+    margin: 0px 0;
+    text-align: center;
+    font-size: 16px;
+}
+
+.all {
+    background: #9BABB1;
+    width: 50%;
+    border-radius: 10px;
+    margin-top: 0px;
+    display: block;
+    position: relative;
+    left: 25%;
+}
+
+.pd {
+    margin: .3% 0;
+}
+
+select, option {
+    width: 70%;
+    height: 25px;
+    text-align: center;
+}
+
+table {
+    width: 93%;
+}
+
+.border-top footer text-muted {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.container {
+    text-align: center;
+    margin-top: 20px;
+}

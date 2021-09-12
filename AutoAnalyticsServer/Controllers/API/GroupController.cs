@@ -11,8 +11,9 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
-
-using AutoAnalyticsServer.DbModel;
+using AutoAnalytics.WebPortal.Domain;
+using AutoAnalytics.WebPortal.DAL.PostgreSQL;
+using AutoAnalytics.WebPortal.Business;
 
 namespace AutoAnalyticsServer.Controllers
 {
@@ -20,22 +21,17 @@ namespace AutoAnalyticsServer.Controllers
     [ApiController]
     public class GroupController : ControllerBase
     {
-        private IAutoAnalyticsContext _dbContext;
+        private DetailAnalysisBusiness _detailAnalysisBusiness;
 
-        public GroupController(IAutoAnalyticsContext dbContext)
+        public GroupController(DetailAnalysisBusiness detailAnalysisBusiness)
         {
-            _dbContext = dbContext;
-            dbContext.FillByValues();
+            _detailAnalysisBusiness = detailAnalysisBusiness;
         }
 
         [HttpGet]
         public string[] GetGroups()
         {
-            return _dbContext.DetailInfos.
-                //select detail groups from db
-                Select(detailInfo => detailInfo.DetGroup).
-                //remove dublicates
-                Distinct().ToArray();
+            return _detailAnalysisBusiness.GetGroups().Select(x => x.CName).ToArray();
         }
     }
 }

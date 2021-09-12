@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AutoAnalyticsServer.EFModel\AutoAnalytics.WebPortal.Domain.csproj" />
+    <ProjectReference Include="..\AutoAnalyticsServer.IService\AutoAnalytics.WebPortal.IBusiness.csproj" />
+    <ProjectReference Include="..\AutoAnalyticsServer.SqlServerRepository\AutoAnalytics.WebPortal.PostgresDAL.csproj" />
+  </ItemGroup>
+
+</Project>

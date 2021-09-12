@@ -7,7 +7,7 @@ function reloadGroups() {
         //clear our subgroups
         $(group_lb).empty();
 
-        //fill subgroups in cycle
+        //fill groups in cycle
         $.each(json, function (index, value) {
             $(group_lb).append('<option>' + value + '</option>');
         });
@@ -23,7 +23,7 @@ function reloadSubgroups(search_group) {
     //get json data from api
     $.getJSON("/api/subgroup",
         {
-            group: search_group
+            groupName: search_group
         },
         function (json) {
 
@@ -45,8 +45,8 @@ function reloadDetails(search_group, search_subgroup) {
     //get json data from api
     $.getJSON("/api/detail",
         {
-            group: search_group,
-            subgroup: search_subgroup
+            groupName: search_group,
+            subgroupName: search_subgroup
         },
         function (json) {
 
@@ -64,9 +64,9 @@ function addRecommendDetails(search_group, search_subgroup, search_detail) {
     //get json data from api
     $.getJSON("/api/recommendation",
         {
-            group: search_group,
-            subgroup: search_subgroup,
-            detail: search_detail
+            groupName: search_group,
+            subgroupName: search_subgroup,
+            detailName: search_detail
         },
         function (json) {
 

@@ -1,11 +1,13 @@
+using AutoAnalytics.WebPortal.Business;
+using AutoAnalytics.WebPortal.DAL.PostgreSQL;
+using AutoAnalytics.WebPortal.Domain;
+using AutoAnalytics.WebPortal.IDAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using Microsoft.EntityFrameworkCore;
-using AutoAnalyticsServer.DbModel;
 
 namespace AutoAnalyticsServer
 {
@@ -23,17 +25,13 @@ namespace AutoAnalyticsServer
         {
             services.AddControllersWithViews();
 
-#if DEBUG
-            services.AddDbContext<IAutoAnalyticsContext, AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(opt =>
+            services.AddDbContext<AutoAnalyticsPostgresDBContext, AutoAnalyticsPostgresDBContext>(opt =>
             {
-                opt.UseInMemoryDatabase("TestMemoryDb");
-            });
-#else
-            services.AddDbContext<IAutoAnalyticsContext, AutoAnalyticsServer.SqlServerEFModel.AutoAnalyticsSqlServerEFContext>(opt =>
-            {
-                opt.UseSqlServer(Configuration.GetConnectionString("AutoAnalyticsDB"));
+                opt.UseNpgsql(Configuration.GetConnectionString("AutoAnalyticsDB"));
             }, ServiceLifetime.Singleton);
-#endif
+
+            services.AddScoped<AutoAnalyticsPostgresDBContext, AutoAnalyticsPostgresDBContext>();
+            services.AddScoped<DetailAnalysisBusiness, DetailAnalysisBusiness>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
