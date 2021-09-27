@@ -31,13 +31,14 @@ namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                //optionsBuilder.UseNpgsql("Host=192.168.0.108;Database=dreamscape_portal_db;Username=postgres;Password=qwe1");
+                optionsBuilder.UseNpgsql("Host=192.168.0.107;Database=auto_analytics_db;Username=postgres;Password=qwe1");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "en_US.UTF-8");
+            modelBuilder.HasPostgresExtension("plr")
+                .HasAnnotation("Relational:Collation", "en_US.UTF-8");
 
             modelBuilder.Entity<TAssocRule>(entity =>
             {
@@ -67,11 +68,25 @@ namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
                 entity.Property(e => e.ReasonDetailId).HasColumnName("reason_detail_id");
 
                 entity.Property(e => e.RegionId).HasColumnName("region_id");
+
+                entity.HasOne(d => d.ConseqDetail)
+                    .WithMany(p => p.TAssocRuleConseqDetails)
+                    .HasForeignKey(d => d.ConseqDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("t_assoc_rule_conseq_detail_id_fkey");
+
+                entity.HasOne(d => d.ReasonDetail)
+                    .WithMany(p => p.TAssocRuleReasonDetails)
+                    .HasForeignKey(d => d.ReasonDetailId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("t_assoc_rule_reason_detail_id_fkey");
             });
 
             modelBuilder.Entity<TCrash>(entity =>
             {
                 entity.ToTable("t_crash", "auto_analytics");
+
+                entity.HasIndex(e => e.DamageDetailId, "IX_t_crash_damage_detail_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -101,6 +116,8 @@ namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
             modelBuilder.Entity<TDetail>(entity =>
             {
                 entity.ToTable("t_detail", "auto_analytics");
+
+                entity.HasIndex(e => e.SubgroupId, "IX_t_detail_subgroup_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -165,6 +182,8 @@ namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
             modelBuilder.Entity<TSubgroup>(entity =>
             {
                 entity.ToTable("t_subgroup", "auto_analytics");
+
+                entity.HasIndex(e => e.GroupId, "IX_t_subgroup_group_id");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")

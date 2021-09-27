@@ -1,4 +1,7 @@
-﻿#nullable disable
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
 {

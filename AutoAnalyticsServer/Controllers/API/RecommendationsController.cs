@@ -45,21 +45,28 @@ namespace AutoAnalyticsServer.Controllers
             TSubgroup subgroup = _dbContext.TSubgroups.FirstOrDefault(sg => sg.CName == subgroupName);
 
             _dbContext.Entry(subgroup).Collection(s => s.TDetails).Load();
-
             //Получаем id-шник подгруппы
             TDetail detail = _dbContext.TDetails.FirstOrDefault(det => det.CName == detailName);
 
-            IQueryable<TAssocRule> detailAssoRules = _dbContext.TAssocRules.Where(ar => ar.ReasonDetailId == detail.Id);
+            _dbContext.Entry(detail).Collection(s => s.TAssocRuleReasonDetails).Load();
+            var detailAssoRules = detail.TAssocRuleReasonDetails;
 
             foreach (var assocRule in detailAssoRules)
             {
-                TDetail assocDetail = _dbContext.TDetails.First(x => x.Id == assocRule.ConseqDetailId);
+                _dbContext.Entry(assocRule).Reference(s => s.ConseqDetail).Load();
+                TDetail assocDetail = assocRule.ConseqDetail;
+
+                _dbContext.Entry(assocDetail).Reference(s => s.Subgroup).Load();
+                TSubgroup assocSubgroup = assocDetail.Subgroup;
+
+                _dbContext.Entry(assocSubgroup).Reference(s => s.Group).Load();
+                TGroup assocGroup = assocSubgroup.Group;
 
                 Recommendation recommendation = new Recommendation()
                 {
                     Detail = assocDetail.CName,
-                    Subgroup = assocDetail.Subgroup.CName,
-                    Group = assocDetail.Subgroup.Group.CName,
+                    Subgroup = assocSubgroup.CName,
+                    Group = assocGroup.CName,
                     Confidence = Convert.ToDouble(assocRule.CReliability)
                 };
 

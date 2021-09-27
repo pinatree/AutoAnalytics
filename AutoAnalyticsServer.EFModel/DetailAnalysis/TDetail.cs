@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -8,6 +9,8 @@ namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
     {
         public TDetail()
         {
+            TAssocRuleConseqDetails = new HashSet<TAssocRule>();
+            TAssocRuleReasonDetails = new HashSet<TAssocRule>();
             TCrashes = new HashSet<TCrash>();
         }
 
@@ -16,6 +19,8 @@ namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
         public string CName { get; set; }
 
         public virtual TSubgroup Subgroup { get; set; }
+        public virtual ICollection<TAssocRule> TAssocRuleConseqDetails { get; set; }
+        public virtual ICollection<TAssocRule> TAssocRuleReasonDetails { get; set; }
         public virtual ICollection<TCrash> TCrashes { get; set; }
     }
 }

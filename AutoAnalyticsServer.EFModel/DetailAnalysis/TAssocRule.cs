@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 #nullable disable
 
@@ -16,5 +17,8 @@ namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
         public decimal CLift { get; set; }
         public long RegionId { get; set; }
         public long ModelId { get; set; }
+
+        public virtual TDetail ConseqDetail { get; set; }
+        public virtual TDetail ReasonDetail { get; set; }
     }
 }

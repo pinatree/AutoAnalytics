@@ -111,11 +111,14 @@ namespace AutoAnalytics.WebPortal.Business
             //Получаем деталь
             TDetail detail = _dbContext.TDetails.FirstOrDefault(det => det.Id == detailId);
 
-            IQueryable<TAssocRule> detailAssoRules = _dbContext.TAssocRules.Where(ar => ar.ReasonDetailId == detail.Id);
+            //Load details
+            _dbContext.Entry(detail).Collection(cntxt => cntxt.TAssocRuleReasonDetails).Load();
+            var detailAssoRules = detail.TAssocRuleReasonDetails;
 
             foreach (var assocRule in detailAssoRules)
             {
-                TDetail assocDetail = _dbContext.TDetails.First(x => x.Id == assocRule.ConseqDetailId);
+                _dbContext.Entry(assocRule).Reference(cntxt => cntxt.ConseqDetail).Load();
+                TDetail assocDetail = assocRule.ConseqDetail;
 
                 Recommendation recommendation = new Recommendation()
                 {
