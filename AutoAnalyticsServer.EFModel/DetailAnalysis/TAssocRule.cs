@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
 {
+    [Table("TASSOC_RULE", Schema = "DetailAnalytics")]
     public partial class TAssocRule
     {
         public long Id { get; set; }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
 {
+    [Table("TSUBGROUP", Schema = "DetailAnalytics")]
     public partial class TSubgroup
     {
         public TSubgroup()

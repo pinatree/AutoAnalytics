@@ -1,7 +1,6 @@
 using AutoAnalytics.WebPortal.Business;
-using AutoAnalytics.WebPortal.DAL.PostgreSQL;
 using AutoAnalytics.WebPortal.Domain;
-using AutoAnalytics.WebPortal.IDAL;
+using AutoAnalytics.WebPortal.Domain.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

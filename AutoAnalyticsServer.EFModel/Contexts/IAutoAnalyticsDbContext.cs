@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
 
-namespace AutoAnalytics.WebPortal.IDAL
+namespace AutoAnalytics.WebPortal.Domain
 {
     //Interface for DB context
     public interface IAutoAnalyticsDbContext

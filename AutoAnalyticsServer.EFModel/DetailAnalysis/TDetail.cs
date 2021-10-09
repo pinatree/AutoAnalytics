@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace AutoAnalytics.WebPortal.Domain.DetailAnalysis
 {
+    [Table("TDETAIL", Schema = "DetailAnalytics")]
     public partial class TDetail
     {
         public TDetail()

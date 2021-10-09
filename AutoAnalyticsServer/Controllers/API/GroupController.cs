@@ -12,7 +12,6 @@ using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;
 using AutoAnalytics.WebPortal.Domain;
-using AutoAnalytics.WebPortal.DAL.PostgreSQL;
 using AutoAnalytics.WebPortal.Business;
 
 namespace AutoAnalyticsServer.Controllers

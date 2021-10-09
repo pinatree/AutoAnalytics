@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
 using AutoAnalytics.WebPortal.Domain.DetailAnalysis;
-using AutoAnalytics.WebPortal.IDAL;
+using AutoAnalytics.WebPortal.Domain.Authentication;
 
 #nullable disable
 
-namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
+namespace AutoAnalytics.WebPortal.Domain.Contexts
 {
     public partial class AutoAnalyticsPostgresDBContext : DbContext, IAutoAnalyticsDbContext
     {
@@ -26,12 +26,16 @@ namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
         public virtual DbSet<TRegion> TRegions { get; set; }
         public virtual DbSet<TSubgroup> TSubgroups { get; set; }
 
+        public virtual DbSet<TUser> TUsers { get; set; }
+        public virtual DbSet<TUser_auth_info> User_Auth_Infos { get; set; }
+        public virtual DbSet<TUser_personality> User_Personalities { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Host=192.168.0.107;Database=auto_analytics_db;Username=postgres;Password=qwe1");
+                optionsBuilder.UseNpgsql("Host=192.168.0.107;Database=auto_analytics_dev;Username=postgres;Password=qwe1");
             }
         }
 
@@ -202,6 +206,7 @@ namespace AutoAnalytics.WebPortal.DAL.PostgreSQL
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("group_for_subgroup");
             });
+
 
             modelBuilder.HasSequence("t_group_id_sequence", "auto_analytics")
                 .HasMin(0)

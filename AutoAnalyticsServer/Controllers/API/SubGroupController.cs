@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using AutoAnalytics.WebPortal.Domain;
 using AutoAnalytics.WebPortal.Domain.DetailAnalysis;
 using Microsoft.EntityFrameworkCore;
-using AutoAnalytics.WebPortal.DAL.PostgreSQL;
 using AutoAnalytics.WebPortal.Business;
 
 namespace AutoAnalyticsServer.Controllers

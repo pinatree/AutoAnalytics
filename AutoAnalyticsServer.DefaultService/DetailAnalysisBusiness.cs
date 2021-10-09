@@ -1,13 +1,12 @@
-﻿using AutoAnalytics.WebPortal.IDAL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 using AutoAnalytics.WebPortal.Domain.DetailAnalysis;
 using System.Linq;
-using AutoAnalytics.WebPortal.DAL.PostgreSQL;
 using AutoAnalytics.WebPortal.IBusiness;
 using AutoAnalytics.WebPortal.IBusiness.Models;
+using AutoAnalytics.WebPortal.Domain.Contexts;
 
 namespace AutoAnalytics.WebPortal.Business
 {
